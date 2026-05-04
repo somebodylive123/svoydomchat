@@ -222,6 +222,22 @@ cp .env.example .env
 uvicorn app.main:app --reload
 ```
 
+### 5.5 Запуск через
+
+Если не хотите поднимать окружение вручную, можно запустить сервис в контейнере:
+
+```bash
+docker compose up --build
+```
+
+После старта приложение доступно на `http://127.0.0.1:8000`.
+
+Остановить сервис:
+
+```bash
+docker compose down
+```
+
 Health-check:
 ```bash
 curl -X GET http://127.0.0.1:8000/health
