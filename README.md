@@ -322,9 +322,43 @@ pytest -q
 
 ## 10) Roadmap до production
 
-1. Перейти на PostgreSQL + Alembic migrations.
-2. Вынести тяжелую обработку в task queue (Celery/RQ/Kafka consumers).
-3. Добавить retry/backoff + idempotency keys для CRM/webhook операций.
-4. Усилить безопасность webhook (signatures, replay protection, rate limiting).
-5. Ввести observability: метрики, tracing, structured logs, alerting.
-6. Добавить E2E тесты с Twilio sandbox contract fixtures.
+1. Перейти с SQLite на PostgreSQL + Alembic migrations.
+
+2. Вынести тяжелую обработку в task queue:
+   - Celery;
+   - RQ;
+   - Kafka consumers.
+
+3. Добавить retry/backoff + idempotency keys для CRM/webhook операций:
+   - повторная отправка при временных ошибках;
+   - защита от дублей сообщений;
+   - корректная обработка повторных webhook-событий.
+
+4. Усилить безопасность webhook:
+   - проверка подписи входящих запросов;
+   - replay protection;
+   - rate limiting;
+   - логирование подозрительных запросов.
+
+5. Ввести observability:
+   - structured logs;
+   - метрики;
+   - tracing;
+   - alerting;
+   - мониторинг ошибок webhook и отправки сообщений.
+
+6. Добавить E2E тесты с Twilio Sandbox contract fixtures:
+   - тесты входящих WhatsApp-сообщений;
+   - тесты исходящих ответов;
+   - тесты ошибок провайдера;
+   - тесты retry-логики.
+
+7. Для production перейти с Twilio Sandbox на официальный Meta WhatsApp Cloud API:
+   - подключить Meta Developer App;
+   - настроить WhatsApp Business Account;
+   - подключить реальный business phone number;
+   - получить permanent access token через System User;
+   - реализовать webhook verification для Meta;
+   - реализовать проверку подписи `X-Hub-Signature-256`;
+   - нормализовать payload Meta Cloud API во внутренний формат `{phone, message}`;
+   - реализовать отправку исходящих WhatsApp-сообщений через Meta Graph API.
